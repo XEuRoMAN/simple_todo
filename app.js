@@ -36,14 +36,22 @@ fs.readdirSync(models_path).forEach(function (model_file_name) {
     }
 });
 
-// loading controllers (a.k.a routers) dynamically
-fs.readdirSync(controllers_path).forEach(function (controller_file_name) {
-    if ('.js' === controller_file_name.substr(-3)) {
-        var controller_path = path.join(controllers_path, controller_file_name);
+function loadControllers(controllers_path) {
+    fs.readdirSync(controllers_path).forEach(function (controller_file_name) {
+        var file_path = path.join(controllers_path, controller_file_name);
 
-        require(controller_path)(app, mongoose);
-    }
-});
+        var file_info = fs.statSync(file_path);
+
+        if (true === file_info.isDirectory()) {
+            loadControllers(file_path);
+        } else if ('.js' === controller_file_name.substr(-3)) {
+            require(file_path)(app, mongoose);
+        }
+    });
+}
+
+// loading controllers (a.k.a routers) dynamically
+loadControllers(controllers_path);
 
 // catch 404 and forward to error handler
 app.use(function (request, response, next) {
