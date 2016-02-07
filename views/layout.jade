@@ -3,5 +3,7 @@ html
     head
         title= page_title
         link(rel='stylesheet', href='/stylesheets/style.css')
+        block extra_headers
     body
         block content
+        block body_end_scripts

@@ -1,0 +1,21 @@
+.todo_container {
+    margin: 5px auto;
+    padding: 5px;
+    width: 300px;
+    border: 1px solid #000000;
+}
+.todo_container ul {
+    padding: 0 0 0 20px;
+}
+.todo_container.hidden {
+    display: none;
+}
+
+.loader {
+    display: none;
+    text-align: center;
+    font-weight: bold;
+}
+.loader.active {
+    display: block;
+}

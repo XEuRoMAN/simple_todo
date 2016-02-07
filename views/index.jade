@@ -1,5 +1,10 @@
 extends layout
 
+prepend extra_headers
+    link(rel='stylesheet', href='/stylesheets/todo_app.css')
+
 block content
-    h1= page_title
-    p Welcome to #{page_title}
+    div(id='todo_app')
+
+prepend body_end_scripts
+    script(type='text/javascript', src='/javascripts/todo_app.js')
