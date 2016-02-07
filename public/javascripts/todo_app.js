@@ -19747,7 +19747,7 @@ var ToDoActions = require('../actions/ToDoActions');
 var ToDoList = React.createClass({displayName: "ToDoList",
     getInitialState: function () {
         return {
-            title: 'abc'
+            title: ''
         };
     },
 
@@ -19799,9 +19799,8 @@ module.exports = ToDoDispatcher;
 },{"flux":3}],170:[function(require,module,exports){
 var Dispatcher = require('../dispatchers/ToDoDispatcher');
 var ToDoAPI = require('../todo_api');
-const Actions = require('../actions/ToDoActions.json');
-
 var EventEmitter = require('events').EventEmitter;
+const Actions = require('../actions/ToDoActions.json');
 
 var _is_loading = false;
 var _todo_list = {};
@@ -19849,8 +19848,6 @@ var TodoStore = Object.assign({}, EventEmitter.prototype, {
 
 
 Dispatcher.register(function (action) {
-    var title = '';
-
     switch (action.action_type) {
         case Actions.LOAD:
             enableLoader();
@@ -19873,7 +19870,7 @@ Dispatcher.register(function (action) {
 
             break;
         case Actions.CREATE:
-            title = action.title.trim();
+            var title = action.title.trim();
 
             if ('' !== title) {
                 var post_data = {
@@ -19894,7 +19891,7 @@ Dispatcher.register(function (action) {
             break;
         case Actions.REMOVE:
             ToDoAPI.removeToDoItem(action.id, function (result) {
-                if (null !== result && null === result.errors) {
+                if (null !== result && null === result.errors && true === result.deleted) {
                     remove(action.id);
                 }
 
@@ -19910,20 +19907,6 @@ Dispatcher.register(function (action) {
 module.exports = TodoStore;
 
 },{"../actions/ToDoActions.json":163,"../dispatchers/ToDoDispatcher":169,"../todo_api":171,"events":1}],171:[function(require,module,exports){
-module.exports = {
-    getToDoList: function (callback) {
-        makeGetRequest('/api/todo', callback);
-    },
-
-    addToDoItem: function (post_data, callback) {
-        makePostRequest('/api/todo', post_data, callback);
-    },
-
-    removeToDoItem: function (todo_id, callback) {
-        makeDeleteRequest('/api/todo/' + todo_id, callback);
-    }
-};
-
 function makeGetRequest(url, callback) {
     var request = new XMLHttpRequest();
 
@@ -19967,4 +19950,17 @@ function makeDeleteRequest(url, callback) {
     request.send();
 }
 
+module.exports = {
+    getToDoList: function (callback) {
+        makeGetRequest('/api/todo', callback);
+    },
+
+    addToDoItem: function (post_data, callback) {
+        makePostRequest('/api/todo', post_data, callback);
+    },
+
+    removeToDoItem: function (todo_id, callback) {
+        makeDeleteRequest('/api/todo/' + todo_id, callback);
+    }
+};
 },{}]},{},[165]);
